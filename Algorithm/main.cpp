@@ -8,8 +8,11 @@ int main(){
     int yRook[2], xRook[2];
     int result[2];
     bool blockedWall = false;//'¤§' wall
+    bool allBlockedWall = false;
     int countBlocked = 0;// 7 is full count
     bool openToRook = false;//open to rook
+
+    bool betweenRookEmpty = false;
     
     
     for(int i = 0 ; i < 2; i++){
@@ -63,11 +66,10 @@ int main(){
         }
     if(countBlocked == 7)
         blockedWall = true;
+    else if(countBlocked == 8)
+        allBlockedWall = true;
     
-    //cout << "countBlocked : " << countBlocked << endl;
-    //cout << "blockedWall : " << blockedWall << endl;
-
-    //count rook 
+    //count rook
     int nRook;
     if(xRook[0] == -1){
         cout << 0 << endl;
@@ -82,6 +84,28 @@ int main(){
     int yDisKR, xDisKR;//distance of king and rook
     int xMin, xMax;
     int yMin, yMax;
+
+    //check between rooks empty or not
+    int ybetweenEmpty = 0;
+    int xbetweenEmpty = 0;
+    if(nRook == 2){
+        if(yRook[0] == yRook[1]){
+            for(int i = xRook[0]+1 ; i < xRook[1] ; i++){
+                if(board[yRook[0]][i] == 0)
+                    xbetweenEmpty++;
+            }
+            if(xbetweenEmpty == xRook[1]-xRook[0]-1)
+                betweenRookEmpty = true;
+        }
+        else if(xRook[0] == xRook[1]){
+            for(int j = yRook[0]+1 ; j < yRook[1] ; j++){
+                if(board[j][xRook[0]] == 0)
+                    ybetweenEmpty++;
+            }
+            if(ybetweenEmpty == yRook[1]-yRook[0]-1)
+                betweenRookEmpty = true;
+        }
+    }
     
     //calculate the y/x distance of king and rook
     for(int r = 0 ; r < nRook ; r++){
@@ -147,6 +171,9 @@ int main(){
         else if(countXEmp+1 == xDisKR
                 && blockedWall && openToRook)
             result[r] = 1;
+        else if(countXEmp+1 == xDisKR
+                && allBlockedWall && betweenRookEmpty)
+            result[r] = 1;
         else
             result[r] = 0;
     }
@@ -181,7 +208,7 @@ int main(){
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 
+0 0 0 0 0 0 0 0
 
 3 3 3 0 0 0 0 0
 3 1 0 0 3 2 0 0
@@ -195,6 +222,15 @@ int main(){
 3 3 3 0 0 0 0 0
 3 1 3 0 0 2 0 2
 3 3 3 0 0 0 0 0
+0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+
+3 1 3 0 0 2 0 2
+3 3 3 0 0 0 0 0
+0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0

@@ -7,6 +7,13 @@ int main(){
     int yKing, xKing;
     int yRook[2], xRook[2];
     int result[2];
+    bool blockedWall = false;//'之' wall
+    bool allBlockedWall = false;
+    int countBlocked = 0;// 7 is full count
+    bool openToRook = false;//open to rook
+
+    bool betweenRookEmpty = false;
+    
     
     for(int i = 0 ; i < 2; i++){
         yRook[i] = -1;
@@ -33,8 +40,36 @@ int main(){
                 r++;
             }
         }
+    //check blocked wall
+    for(int j = 0 ; j < 8 ; j++)
+        for(int i = 0 ; i < 8 ; i++){
+            if( j == yKing-1
+                && (i == xKing-1 || i == xKing || i == xKing+1)
+                && board[j][i] == 3 )
+                countBlocked++;
+            else if( j == yKing 
+                     && (i == xKing-1 || i == xKing+1)
+                     && board[j][i] == 3 )
+                countBlocked++;
+            else if( j == yKing+1
+                     && (i == xKing-1 || i == xKing || i == xKing+1)
+                     && board[j][i] == 3 )
+                countBlocked++;
 
-    //count rook 
+        }
+    for(int j = yKing-1 ; j <= yKing+1 ; j++)
+        for(int i = xKing-1 ; i <= xKing+1 ; i++){
+            if(j == yKing && i == xKing)
+                continue;
+            if(j < 0 || i < 0)
+                countBlocked++;
+        }
+    if(countBlocked == 7)
+        blockedWall = true;
+    else if(countBlocked == 8)
+        allBlockedWall = true;
+    
+    //count rook
     int nRook;
     if(xRook[0] == -1){
         cout << 0 << endl;
@@ -49,6 +84,28 @@ int main(){
     int yDisKR, xDisKR;//distance of king and rook
     int xMin, xMax;
     int yMin, yMax;
+
+    //check between rooks empty or not
+    int ybetweenEmpty = 0;
+    int xbetweenEmpty = 0;
+    if(nRook == 2){
+        if(yRook[0] == yRook[1]){
+            for(int i = xRook[0]+1 ; i < xRook[1] ; i++){
+                if(board[yRook[0]][i] == 0)
+                    xbetweenEmpty++;
+            }
+            if(xbetweenEmpty == xRook[1]-xRook[0]-1)
+                betweenRookEmpty = true;
+        }
+        else if(xRook[0] == xRook[1]){
+            for(int j = yRook[0]+1 ; j < yRook[1] ; j++){
+                if(board[j][xRook[0]] == 0)
+                    ybetweenEmpty++;
+            }
+            if(ybetweenEmpty == yRook[1]-yRook[0]-1)
+                betweenRookEmpty = true;
+        }
+    }
     
     //calculate the y/x distance of king and rook
     for(int r = 0 ; r < nRook ; r++){
@@ -62,10 +119,16 @@ int main(){
             if(xKing < xRook[r]){
                 xMin = xKing;
                 xMax = xRook[r];
+                //check 之 to rook
+                if(board[yKing][xKing+1] == 0)
+                    openToRook = true;
             }
             else{
                 xMin = xRook[r];
                 xMax = xKing;
+                //check 之 to rook
+                if(board[yKing][xKing-1] == 0)
+                    openToRook = true;
             }
 
             countXEmp = 0;
@@ -77,10 +140,16 @@ int main(){
             if(yKing < yRook[r]){
                 yMin = yKing;
                 yMax = yRook[r];
+                //check 之 to rook
+                if(board[yKing+1][xKing] == 0)
+                    openToRook = true;
             }
             else{
                 yMin = yRook[r];
                 yMax = yKing;
+                //check 之 to rook
+                if(board[yKing-1][xKing] == 0)
+                    openToRook = true;
             }
 
             countYEmp = 0;
@@ -94,11 +163,16 @@ int main(){
         
         if(countYEmp == yDisKR)
             result[r] = 1;
-        else if(countYEmp+1 == yDisKR)
+        else if(countYEmp+1 == yDisKR
+                && blockedWall && openToRook)
             result[r] = 1;
         else if(countXEmp == xDisKR)
             result[r] = 1;
-        else if(countXEmp+1 == xDisKR)
+        else if(countXEmp+1 == xDisKR
+                && blockedWall && openToRook)
+            result[r] = 1;
+        else if(countXEmp+1 == xDisKR
+                && allBlockedWall && betweenRookEmpty)
             result[r] = 1;
         else
             result[r] = 0;
@@ -117,8 +191,7 @@ int main(){
 }
  
 /*
-#include <iostream>
-using namespace std;
+#include <stdio.h>
  
 int main(){
     
@@ -128,78 +201,45 @@ int main(){
  
  
 /*
-0 3 0 0 0 0 0 0
-3 1 0 0 0 2 0 0
-0 3 0 0 0 0 0 0
+3 3 3 0 0 0 0 0
+3 1 0 0 3 2 0 0
+3 3 3 0 0 0 0 0
 0 2 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 
-
-0 3 0 0 0 0 0 0
-3 1 0 0 0 0 0 0
-0 3 0 0 0 0 0 0
-2 2 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-
-
-0 3 0 0 0 0 0 0
+3 3 3 0 0 0 0 0
 3 1 0 0 3 2 0 0
-0 3 0 0 0 2 0 0
+0 3 3 0 0 0 0 0
+0 2 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+
+3 3 3 0 0 0 0 0
+3 1 3 0 0 2 0 2
+3 3 3 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 
-0 3 0 0 0 0 0 0
-3 0 0 0 3 0 0 0
-0 3 0 0 0 0 0 0
+3 1 3 0 0 2 0 2
+3 3 3 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 2
-0 0 0 0 0 0 2 1
+0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
+0 0 0 0 0 0 0 0
 
-
-0 3 0 0 0 0 0 0
-3 0 0 0 3 0 0 0
-0 3 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 2
-0 0 0 0 0 0 0 1
-
-0 3 0 0 0 0 0 0
-3 0 0 0 3 0 0 0
-0 3 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 1
-
-
-
-0 3 0 0 0 0 0 0
-3 1 3 3 3 0 0 2
-0 3 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 0
-0 0 0 0 0 0 0 2
-
-
-0 3 0 0 0 0 0 0
-3 1 3 0 2 0 0 2
-0 3 0 0 0 0 0 0
+3 3 3 0 0 0 0 0
+3 1 3 3 0 2 0 2
+3 3 3 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
 0 0 0 0 0 0 0 0
