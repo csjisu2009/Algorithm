@@ -1,4 +1,6 @@
-//looks complicated at first, but just a print out floor problem!!!
+//time   : 0h 50m
+
+//review : looks complicated at first, but just a print out floor problem!!!
 
 #include <stdio.h>
 
