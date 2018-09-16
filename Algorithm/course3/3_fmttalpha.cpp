@@ -1,3 +1,7 @@
+//time   : 
+
+//review : can't solve if you just use for-loop, you should use recursion
+
 #include <stdio.h>
 
 int main(){
