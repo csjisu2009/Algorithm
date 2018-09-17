@@ -1,6 +1,6 @@
-//time   : 0h 0m
+//time   : 0h 30m
 
-//review : 
+//review : think simple!! solve one value and then solve them all!!
 
 #include <stdio.h>
 
