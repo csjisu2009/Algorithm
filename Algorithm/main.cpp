@@ -1,28 +1,27 @@
-//time   : 0h 0m
+//time   : 1h 30m
 
-//review : 
+//review : can't solve if you just use for-loop, you should use recursion
 
 #include <stdio.h>
 
-int s[1000][1000], a[1000];
-
 int main(){
-    int n;
-    scanf("%d", &n);
-
-    for(int j = 0 ; j < n ; j++)
-        for(int i = 0 ; i < n ; i++){
-            scanf("%d", &s[j][i]);
+    int count= 0, flyDist = 0, dist = 0;
+    int x, y;
+    bool bArrived = false;
+    scanf("%d %d", &x, &y);
+    dist  = y - x;
+    for(int i = 1; ; i++){
+        for(int j = 0 ; j < 2 ; j++){
+            flyDist = flyDist + i;
+            count++;
+            if(dist <= flyDist){
+                bArrived = true;
+                break;
+            }
         }
-    a[0] = (s[0][1] + s[0][2] - s[1][2])/2;
-
-    for(int i = 1 ; i < n ; i++)
-        a[i] = s[0][i] - a[0];
-
-    for(int i = 0 ; i < n ; i++){
-        printf("%d", a[i]);
-        if(i == n-1) printf("\n");
-        else printf(" ");
+        if(bArrived)
+            break;
     }
+    printf("%d\n", count);
     return 0;
 }
