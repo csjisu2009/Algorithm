@@ -1,3 +1,5 @@
+//Euclidean algorithm(유클리드 호제법)
+
 #include <stdio.h>
  
 long long int gcd(long long int num1, long long int num2){

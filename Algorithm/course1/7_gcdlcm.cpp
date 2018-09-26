@@ -1,3 +1,5 @@
+//Euclidean algorithm(유클리드 호제법)
+
 #include <iostream>
 using namespace std;
  
