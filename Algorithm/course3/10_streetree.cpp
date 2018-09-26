@@ -1,6 +1,8 @@
-//time   : 0h 0m
+//time   : 1h 0m
  
-//review : Euclidean algorithm(유클리드 호제법)
+/*review : Euclidean algorithm(유클리드 호제법),
+           you do not have to use loop!!!! to solve this problem!!!!(n^2-loop -> n-loop -> no-loop)
+*/
 
 #include <stdio.h>
 
@@ -35,7 +37,8 @@ int gcd(int num1, int num2){
 
 int main(){
     //common: common tree distance
-    int N, common, count = 0;
+    int N, common;
+    int fullCount, count;//count : how many tree you will plant
     scanf("%d", &N);
     for(int i = 0 ; i < N ; i++){
         scanf("%d", &pos[i]);
@@ -45,14 +48,8 @@ int main(){
             common = gcd(common, pos[i] - pos[i-1]);
         }
     }
-
-    for(int i = pos[0] + common ; i <= pos[N-1] ; i += common){//loop for real position
-        for(int j = 1 ; j < N ; j++){//loop for tree position you have already plant
-            if(i == pos[j]) break;
-            if(j == N-1) count ++;//j == N-1 still did not break, this mean there is no tree in this position, so count++
-        }
-    }
-
+    fullCount = (pos[N-1] - pos[0])/common + 1;
+    count = fullCount - N;
     printf("%d\n", count);
 
     return 0;
