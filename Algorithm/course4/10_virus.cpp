@@ -1,6 +1,6 @@
-//time   : 0 h 0m
+//time   : 0 h 26m
 
-/*review : 
+/*review : implement dfs by using recursion!!
 */
 #include <stdio.h>
 
