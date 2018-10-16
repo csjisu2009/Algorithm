@@ -4,10 +4,12 @@
 */
 #include <stdio.h>
 
+#define MAX 101
+
 int N;//node count
 int M;//edge count
-bool  bVisited[101];
-bool bConnected[101][101];
+bool  bVisited[MAX];
+bool bConnected[MAX][MAX];
 int count = 0;
 
 void dfs(int n){
