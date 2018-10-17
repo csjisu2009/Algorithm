@@ -1,4 +1,4 @@
-//time   : 0h 0m
+//time   : 1h 0m
 
 /*review : 1. Gen:Variant.Ursu.236333
            2. there are 3 status of vectex in bfs
