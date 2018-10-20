@@ -1,14 +1,14 @@
-//time   : 5h 0m
+//time   : 0h 0m
 
-/*review : 1. use array is easy!!
-           2. buffer store enter problem!!
-              use scanf(" %c")!!!!!
-              //http://itbrain.tistory.com/entry/scanf-%EC%97%B0%EC%86%8D%EC%82%AC%EC%9A%A9%EC%8B%9C-%EB%B2%84%ED%8D%BC%EB%AC%B8%EC%A0%9C
+/*review : 
 */
 #include <stdio.h>
+#include <iostream>
+using namespace std;
 
-#define DataType char
-#define stature(p) ((p) ? (p)->height : -1)
+#define DataType int
+int N;
+bool bNodesPrinted[100];
 
 class BinNode{
 public:
@@ -16,7 +16,6 @@ public:
     BinNode* lChild;
     BinNode* rChild;
     DataType data;
-    int height;
     int size();
 
     BinNode();
@@ -59,8 +58,6 @@ class BinTree{
 protected:
     int _size;
     BinNode* _root;
-    virtual int updateHeight(BinNode* x);
-    void updateHeightAbove(BinNode* x);
 public:
     int size() const{return _size;}
     bool empty() const{return !_root;}
@@ -73,44 +70,30 @@ public:
     void traversePost(BinNode* x);
     void initializeRoot(BinNode* x){_root = x;}
     void initializeBinTree(int n);
-    void printNode(BinNode* x){printf("%c", x->data);}
+    void printNode(BinNode* x);
 };
-
-int BinTree::updateHeight(BinNode* x){
-    return x->height = 1 + max(stature(x->lChild), stature(x->rChild));
-}
-
-void BinTree::updateHeightAbove(BinNode* x){
-    while(x){
-        updateHeight(x);
-        x = x->parent;
-    }
-}
 
 BinNode* BinTree::insertAsLC(BinNode* x, DataType const& e){
     _size++;
     x->insertAsLC(e);
-    updateHeightAbove(x);
     return x->lChild;
 }
 
 BinNode* BinTree::insertAsRC(BinNode* x, DataType const& e){
         _size++;
         x->insertAsRC(e);
-        updateHeightAbove(x);
         return x->rChild;
 }
 
 void BinTree::createTree(BinNode* x, DataType const& e, DataType const& le, DataType const& re){
-    if(le== '.' && re =='.') return;// why do not have this line, the example input end at 'E . .'(terminate after this input)??
+    if(le== -1 && re == -1) return;// why do not have this line, the example input end at 'E . .'(terminate after this input)??
     if(!x) return;
-    if(x->data < 65 || 90 < x->data) return;
+    if(x->data < -1 || 99 < x->data) return;
     if(x->data == e){
-        //printf("x->data(%c) == e(%c)\n", x->data, e);
-        if(le != '.') x->insertAsLC(le);
-        else if(le == '.') x->lChild = NULL;
-        if(re != '.') x->insertAsRC(re);
-        else if(re == '.') x->rChild = NULL;
+        if(le != -1) x->insertAsLC(le);
+        else if(le == -1) x->lChild = NULL;
+        if(re != -1) x->insertAsRC(re);
+        else if(re == -1) x->rChild = NULL;
         return;
     }
     if(x->lChild) createTree(x->lChild, e, le, re);
@@ -119,51 +102,67 @@ void BinTree::createTree(BinNode* x, DataType const& e, DataType const& le, Data
 
 void BinTree::traversePre(BinNode* x){
     if(!x) return;
-    if(x->data < 65 || 90 < x->data) return;
-    printf("%c", x->data);
+    if(x->data < -1 || 99 < x->data) return;
+    printNode(x);
     traversePre(x->lChild);
     traversePre(x->rChild);
 }
 
 void BinTree::traverseIn(BinNode* x){
     if(!x) return;
-    if(x->data < 65 || 90 < x->data) return;
+    if(x->data < -1 || 99 < x->data) return;
     traverseIn(x->lChild);
-    printf("%c", x->data);
+    printNode(x);
     traverseIn(x->rChild);
 }
 
 void BinTree::traversePost(BinNode* x){
     if(!x) return;
-    if(x->data < 65 || 90 < x->data) return;
+    if(x->data < -1 || 99 < x->data) return;
     traversePost(x->lChild);
     traversePost(x->rChild);
-    printf("%c", x->data);
+    printNode(x);
+
 }
 
- void BinTree::initializeBinTree(int n){
-        char ch = 'A';
-        BinNode* node = new BinNode(ch);
+void BinTree::initializeBinTree(int n){
+        BinNode* node = new BinNode(0);
         this->initializeRoot(node);
 
-        char root, lc, rc;
+        int root, lc, rc;
         for(int i = 0 ; i < n ; i++){
             //cin >> root >> lc >> rc;
-            scanf(" %c %c %c", &root, &lc, &rc);//why this input have problem(if input A B C, root : , lc: A, rc: B)
+            scanf("%d %d %d", &root, &lc, &rc);//why this input have problem(if input A B C, root : , lc: A, rc: B)
             createTree(node, root, lc, rc);
         }
     }
 
+void BinTree::printNode(BinNode* x){
+    bNodesPrinted[x->data] = true;
+    printf("%d", x->data);
+    for(int i = 0 ; i < N ; i++)
+        if(bNodesPrinted[i] == false){
+            printf(" ");
+            break;
+        }
+}
+
+void initializebNodePrinted(){
+    for(int i = 0 ; i < N ; i++)
+        bNodesPrinted[i] = false;
+}
+
 int main(){
-    
-    int n;
-    scanf("%d", &n);
+    scanf("%d", &N);
     BinTree* binTree = new BinTree();
 
-    binTree->initializeBinTree(n);
+    binTree->initializeBinTree(N);
 
+    initializebNodePrinted();
     binTree->traversePre(binTree->root()); printf("\n");
+    initializebNodePrinted();
     binTree->traverseIn(binTree->root()); printf("\n");
+    initializebNodePrinted();
     binTree->traversePost(binTree->root()); printf("\n");
     return 0;
 }

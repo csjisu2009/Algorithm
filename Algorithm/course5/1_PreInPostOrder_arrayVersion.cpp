@@ -1,3 +1,9 @@
+//time   : 0h 20m
+
+/*review : use array when you solve tree problem!!
+           it's easier than original tree version!!
+*/
+
 #include <stdio.h>
 
 #define MAX 100
