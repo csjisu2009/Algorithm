@@ -1,3 +1,9 @@
+//time   : 0h 30m
+
+/*review : implement tree using array, it is not very easy in detail e)childrenNum... and also waste of memory
+           next time use vector~!!
+*/
+
 #include <stdio.h>
 
 #define MAX 100
