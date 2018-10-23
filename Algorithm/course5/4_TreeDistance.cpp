@@ -1,6 +1,6 @@
 //time   : 0h 30m
 
-/*review : 1. lca & tree height, that's all
+/*review : 1. lca & tree height, that's all fo tree distance
            2. this code is too dirty.. need to improve!!
            3. implement tree using array
 */
@@ -37,17 +37,9 @@ int main(){
     }
     childrenNum[nodeP] = index;//this line store last node's children num
 
-    //get lca
+    //--------------------------------------------------------lca--------------------------------------------------------
+    //this part of code is too dirty... need to be improve!!!!
     int lca;
-    //int parent[MAX];
-    
-    
-    /*
-    for(int i = 0 ; i < N-1 ; i++){
-        scanf("%d %d", &nodeP, &nodeC);
-        parent[nodeC] = nodeP;
-    }
-    */
     
     //get parents of 'u' vertex
     int uAncestors[MAX];//include node self!! uAncestors[0] = node self
@@ -81,7 +73,7 @@ int main(){
         nodeC = parent[nodeC];
         if(bLCA) break;
     }
-    //
+    //--------------------------------------------------------lca--------------------------------------------------------
 
     printf("%d\n", height[u] - height[lca] + height[v] - height[lca]);
     return 0;
