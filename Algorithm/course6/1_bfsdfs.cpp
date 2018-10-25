@@ -1,3 +1,8 @@
+//time   : 0h 42m
+
+/*review : improve print \n part, exercise code more faster
+*/
+
 #include <stdio.h>
 #include <queue>
 using namespace std;
