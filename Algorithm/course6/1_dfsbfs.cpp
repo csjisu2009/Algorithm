@@ -1,6 +1,10 @@
 //time   : 0h 42m
 
-/*review : improve print \n part, exercise code more faster
+/*review : 1. improve print \n part, exercise code more faster
+           2. bfs remember 3 status
+		      1) discover-x
+			  2) discover-o  visit-x
+			  3) discover-o  visit-o
 */
 
 #include <stdio.h>
@@ -16,6 +20,7 @@ bool bConnected[MAX][MAX];
 bool bDiscovered[MAX];
 
 void dfs(int n) {
+	cnt++;
 	printf("%d", n);
 	//print part
 	if (cnt == N) printf("\n");
@@ -24,10 +29,8 @@ void dfs(int n) {
 
 	bVisited[n] = true;
 	for (int i = 0; i < N; i++)
-		if (bConnected[n][i] && !bVisited[i]) {
+		if (bConnected[n][i] && !bVisited[i])
 			dfs(i);
-			cnt++;
-		}
 	return;
 }
 
@@ -74,7 +77,6 @@ int main() {
 
 	dfs(0);
 	cnt = 0;
-	printf("\n");
 	bfs(0);
 
 	return 0;
