@@ -1,27 +1,12 @@
-//time   : 1h 0m
+//time   : 0h 15m
 
-/*review : 1. bipartite graph
+/*review : 1. bipartite graph == two color paint
            2. dfs version
-		   3. do not forget break!!!! when you use 'switch'
-		   
-		   	//test
-			printf("%d\n", n);
-			switch (vCol[n]) {
-			case 0 :
-				printf("WHITE\n");
-				break;
-			case 1:
-				printf("BLUE\n");
-				break;
-			case 2:
-				printf("YELLOW\n");
-				break;
-			}
-			//
+           3. reference : https://ko.wikipedia.org/wiki/%EC%9D%B4%EB%B6%84_%EA%B7%B8%EB%9E%98%ED%94%84
 */
 
 #include <stdio.h>
-#include <iostream>
+
 #define MAX 1000
 
 int N, E;
@@ -35,8 +20,7 @@ bool bPaintWrong = false;
 bool checkTwoColor(int n) {
 	for (int i = 0; i < N; i++) {
 		if (bConnected[n][i] && (vCol[n] == vCol[i])){
-			printf("NO\n");
-			//printf("NO!! from node %d connected with %d\n", n, i);
+			printf("No\n");
 			bPaintWrong = true;
 			break;
 		}
@@ -49,7 +33,6 @@ bool checkTwoColor(int n) {
 void dfsPaintColor(int n) {
 	if(!bPaintWrong) checkTwoColor(n);
 	if (bPaintWrong) return;
-
 	bVisited[n] = true;
 	for (int i = 0; i < N; i++)
 		if (bConnected[n][i] && !bVisited[i]) {
@@ -76,15 +59,18 @@ int main() {
 		}
 
 	int u, v;
+	int uTemp, vTemp;
 	for (int i = 0; i < E; i++) {
-		scanf("%d %d", &u, &v);
+		scanf("%d %d", &uTemp, &vTemp);
+		u = uTemp - 1;
+		v = vTemp - 1;
 		bConnected[u][v] = true;
 		bConnected[v][u] = true;
 	}
 
 	dfsPaintColor(0);
 	if (!bPaintWrong)
-		printf("YES\n");
+		printf("Yes\n");
 
 	return 0;
 }

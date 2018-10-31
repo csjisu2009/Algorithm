@@ -1,4 +1,4 @@
-//time   : 0 h 26m
+//time   : 0 h 1m
 
 /*review : 1. same as course4 - 10_virus.cpp
            2. implement dfs by using recursion!!
