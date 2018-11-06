@@ -1,3 +1,9 @@
+
+/*remember : when you wannna solve shortest path problem, bfs is proper
+             you must think clearly when use dfs and when use bfs
+             you know when dfs and bfs are same same?? -- when you wanna check all the situation!! they are same same!!
+*/
+
 //time   : 2h 0m
 
 /*review : 1. dfs shortest path!!
