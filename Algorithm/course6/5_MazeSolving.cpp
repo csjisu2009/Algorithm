@@ -1,4 +1,3 @@
-
 /*remember : when you wannna solve shortest path problem, bfs is proper
              you must think clearly when use dfs and when use bfs
              you know when dfs and bfs are same same?? -- when you wanna check all the situation!! they are same same!!
@@ -6,7 +5,7 @@
 
 //time   : 2h 0m
 
-/*review : 1. dfs shortest path!!
+/*review : 1. bfs shortest path!!
            2. reference: 
               Maze solving algorithm - https://en.wikipedia.org/wiki/Maze_solving_algorithm
               A* search algorithm - https://en.wikipedia.org/wiki/A*_search_algorithm
@@ -91,8 +90,6 @@ int countPathLen(int startY, int startX, int endY, int endX) {
 	
 	while (true) {
 		cnt++;
-		if( board[ prePoint[tempY][tempX].y ][ prePoint[tempY][tempX].x ] != 0 )
-			break;
 		if (prePoint[tempY][tempX].y == startY
 			&& prePoint[tempY][tempX].x == startX)
 			break;

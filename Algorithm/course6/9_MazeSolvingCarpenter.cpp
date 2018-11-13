@@ -1,3 +1,19 @@
+/*remember : when you wannna solve shortest path problem, bfs is proper
+             you must think clearly when use dfs and when use bfs
+             you know when dfs and bfs are same same?? -- when you wanna check all the situation!! they are same same!!
+*/
+
+//time   : 2h 0m
+
+/*review : 1. bfs shortest path!!
+           2. bfs twice!! that's all
+              (1 - bfs from start co-ordinate : calculate distance to reachable blocks
+               2 - bfs from end co-ordinate : calculate distance to reachable blocks
+               and then print out the shortest distance sum of start/end co-ordinate!!
+               )
+           3. Time Limit Exceeded !! for Test Case 7/8
+*/
+
 #include <stdio.h>
 #include <iostream>
 #include <queue>
