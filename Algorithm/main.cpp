@@ -1,179 +1,199 @@
 #include <stdio.h>
-#include <iostream>
+#include <queue>
+using namespace std;
+ 
+#define MAX 100000
+ 
+int result;
+bool bVisited[MAX];
+bool bDiscovered[MAX];
+int preNum[MAX];
+ 
+void bfs(int n) {
+    bDiscovered[n] = true;
+    queue<int> qNotVisitedYet;
+    qNotVisitedYet.push(n);
+    while (!qNotVisitedYet.empty()) {
+        int v = qNotVisitedYet.front();
+        if (v == result) {//result calculation completed !!
+            break;
+        }
+        qNotVisitedYet.pop();
+        //if (99999 < v * 2){
+        //    result = v;
+        //    break;
+        //}
+        if (v * 2 < 100000 && !bDiscovered[v * 2]) {
+            preNum[v * 2] = v;
+            qNotVisitedYet.push(v * 2);
+            bDiscovered[v * 2] = true;
+        }
+        if (!bDiscovered[v / 3]) {
+            preNum[v / 3] = v;
+            qNotVisitedYet.push(v / 3);
+            bDiscovered[v / 3] = true;
+        }
+    }
+    return;
+}
+ 
+int calculateLength(int n) {
+    int cnt = 0;
+    while (n != 1) {
+        cnt++;
+        n = preNum[n];
+    }
+    return cnt;
+}
+ 
+int main() {
+    scanf("%d", &result);
+    for (int i = 0; i < MAX; i++) {
+        bVisited[i] = false;
+        bDiscovered[i] = false;
+        preNum[i] = -1;
+    }
+    bfs(1);
+ 
+    printf("%d\n", calculateLength(result));
+ 
+    return 0;
+}
+
+
+
+/*
+#include <stdio.h>
 #include <queue>
 using namespace std;
 
-#define MAX 1000
+#define MAX 1000000
 
-class Point {
-public:
-	int y;
-	int x;
-
-	Point() {}
-	Point(int _y, int _x) {
-		y = _y;
-		x = _x;
-	}
-};
-
-int Y, X;
-int board[MAX][MAX];
-queue<Point> qPoints;
-bool bVisited[MAX][MAX];
+int result;
+bool bVisited[MAX];
 //bool bConnected[MAX][MAX];
-bool bDiscovered[MAX][MAX];// 1) discover-x
-bool bDistance[MAX][MAX][2];// [0] check have distance for bfs(Y - 1, 0) ; [1] check have distance for bfs(0, X-1) ; only check the distance of both are true!!
-Point prePoint[MAX][MAX];
+bool bDiscovered[MAX];// 1) discover-x
+int preNum[MAX];
 
-void bfs(int y, int x) {
-	bDiscovered[y][x] = true;// 2) discover-o
-	queue<Point> qNotVisitedYet;
-	Point pNVY(y, x);
-	qNotVisitedYet.push(pNVY);// 2) visit-x
+void bfs(int n) {
+	bDiscovered[n] = true;// 2) discover-o
+	queue<int> qNotVisitedYet;
+	qNotVisitedYet.push(n);// 2) visit-x
 	while (!qNotVisitedYet.empty()) {
-		Point vp = qNotVisitedYet.front();// 3) visit-o
-		y = vp.y;
-		x = vp.x;
+		int v = qNotVisitedYet.front();// 3) visit-o
+		if (v == result) {
+			//printf("v : %d, result : %d\n", v, result);
+			break;
+		}
+		//printf("%d\n", v);
 		qNotVisitedYet.pop();
-
-		//UP : Point(y-1, x)
-		if ((0 <= y - 1 && y - 1 < Y) && !bDiscovered[y - 1][x] && board[y - 1][x] == 0) {
-			Point pNVY(y - 1, x);
-			qNotVisitedYet.push(pNVY);
-			bDiscovered[y - 1][x] = true;
-			prePoint[y - 1][x] = Point(y, x);
+		//printf("%d * 2 is %d\n", v, v * 2);
+		//printf(bDiscovered[v * 2] ? "true" : "false");
+		//printf("\n");
+		if (!bDiscovered[v * 2]) {
+			//printf("%d is not discovered\n", v * 2);
+			preNum[v * 2] = v;
+			qNotVisitedYet.push(v * 2);
+			bDiscovered[v * 2] = true;
 		}
-		//RIGHT : Point(y, x+1)
-		if ((0 <= x + 1 && x + 1 < X) && !bDiscovered[y][x + 1] && board[y][x + 1] == 0) {
-			Point pNVY(y, x + 1);
-			qNotVisitedYet.push(pNVY);
-			bDiscovered[y][x + 1] = true;
-			prePoint[y][x + 1] = Point(y, x);
+		if (!bDiscovered[v / 3]) {
+			//printf("%d is not discovered\n", v / 2);
+			preNum[v / 3] = v;
+			qNotVisitedYet.push(v / 3);
+			bDiscovered[v / 3] = true;
 		}
-		//DOWN : Point(y+1, x)
-		if ((0 <= y + 1 && y + 1 < Y) && !bDiscovered[y + 1][x] && board[y + 1][x] == 0) {
-			Point pNVY(y + 1, x);
-			qNotVisitedYet.push(pNVY);
-			bDiscovered[y + 1][x] = true;
-			prePoint[y + 1][x] = Point(y, x);
-		}
-		//LEFT : Point(y, x-1)
-		if ((0 <= x - 1 && x - 1 < X) && !bDiscovered[y][x - 1] && board[y][x - 1] == 0) {
-			Point pNVY(y, x - 1);
-			qNotVisitedYet.push(pNVY);
-			bDiscovered[y][x - 1] = true;
-			prePoint[y][x - 1] = Point(y, x);
-		}
-
-		/*these store wall co-ordinates*/ //wall means board[][] == 1
-										  //UP : Point(y-1, x)
-		if (board[y][x] == 0) {
-			if ((0 <= y - 1 && y - 1 < Y) && !bDiscovered[y - 1][x] && board[y - 1][x] != 0) {
-				Point pNVY(y - 1, x);
-				bDiscovered[y - 1][x] = true;
-				prePoint[y - 1][x] = Point(y, x);
+		/*
+		for (int i = 0; i < N; i++)
+			if (bConnected[v][i] && !bDiscovered[i]) {
+				qNotVisitedYet.push(i);
+				bDiscovered[i] = true;
 			}
-			//RIGHT : Point(y, x+1)
-			if ((0 <= x + 1 && x + 1 < X) && !bDiscovered[y][x + 1] && board[y][x + 1] != 0) {
-				Point pNVY(y, x + 1);
-				bDiscovered[y][x + 1] = true;
-				prePoint[y][x + 1] = Point(y, x);
-			}
-			//DOWN : Point(y+1, x)
-			if ((0 <= y + 1 && y + 1 < Y) && !bDiscovered[y + 1][x] && board[y + 1][x] != 0) {
-				Point pNVY(y + 1, x);
-				bDiscovered[y + 1][x] = true;
-				prePoint[y + 1][x] = Point(y, x);
-			}
-			//LEFT : Point(y, x-1)
-			if ((0 <= x - 1 && x - 1 < X) && !bDiscovered[y][x - 1] && board[y][x - 1] != 0) {
-				Point pNVY(y, x - 1);
-				bDiscovered[y][x - 1] = true;
-				prePoint[y][x - 1] = Point(y, x);
-			}
-		}
+		*/
+/*
 	}
 	return;
 }
 
-int countPathLen(int startY, int startX, int endY, int endX) {
-	int cnt = 0;
-	int tempY = endY, tempX = endX;
-	int j, i;
-	while (true) {
+long long int calculateLength(int n) {
+	long long int cnt = 0;
+	while (n != 1) {
 		cnt++;
-		if (prePoint[tempY][tempX].y == startY
-			&& prePoint[tempY][tempX].x == startX)
-			break;
-		j = prePoint[tempY][tempX].y;
-		i = prePoint[tempY][tempX].x;
-		tempY = j;
-		tempX = i;
+		n = preNum[n];
+        printf("n : %d\n", n);
 	}
 	return cnt;
 }
 
 int main() {
-	scanf("%d %d", &Y, &X);
-	for (int j = 0; j < Y; j++)
-		for (int i = 0; i < X; i++)
-			scanf("%d", &board[j][i]);
-
-	for (int j = 0; j < Y; j++)
-		for (int i = 0; i < X; i++) {
-			bDiscovered[j][i] = false;
-			bVisited[j][i] = false;
-		}
-
-	for (int j = 0; j < Y; j++)
-		for (int i = 0; i < X; i++)
-			for (int k = 0; k < 2; k++) {
-				bDistance[j][i][k] = false;
-			}
-
-	//convert maze to graph
-	bfs(Y - 1, 0);
-
-	//start co-ordinate(Y-1, 0) to Wall distance
-	int cnt;
-	for (int j = 0; j < Y; j++) {
-		for (int i = 0; i < X; i++) {
-			if (board[j][i] != 0 && bDiscovered[j][i]) {
-				cnt = 0;
-				cnt = countPathLen(Y - 1, 0, j, i);
-				board[j][i] += (cnt - 1);
-				bDistance[j][i][0] = true;
-			}
-		}
+	scanf("%d", &result);
+	for (int i = 0; i < MAX; i++) {
+		bVisited[i] = false;
+		bDiscovered[i] = false;
+		preNum[i] = -1;
 	}
+	bfs(1);
+	
+	printf("%lld\n", calculateLength(result));
 
-	//end co-ordinate(0, X-1) to Wall distance
-	for (int j = 0; j < Y; j++)
-		for (int i = 0; i < X; i++) {
-			bDiscovered[j][i] = false;
-			bVisited[j][i] = false;
-		}
-	//convert maze to graph
-	bfs(0, X - 1);
-	//start co-ordinate(Y-1, 0) to Wall distance
-	for (int j = 0; j < Y; j++) {
-		for (int i = 0; i < X; i++) {
-			if (board[j][i] != 0 && bDiscovered[j][i]) {// && bDiscovered[j][i]
-				cnt = 0;
-				cnt = countPathLen(0, X - 1, j, i);
-				board[j][i] += cnt;
-				bDistance[j][i][1] = true;
-			}
-		}
-	}
-
-	int minDistance = 987654321;
-	for (int j = 0; j < Y; j++)
-		for (int i = 0; i < X; i++) {
-			if (bDistance[j][i][0] && bDistance[j][i][1] && (board[j][i] < minDistance))
-				minDistance = board[j][i];
-		}
-	printf("%d\n", minDistance);
 	return 0;
 }
+*/
+/*
+#include <stdio.h>
+#include <queue>
+#include <iostream>
+using namespace std;
+
+#define MAX 100000
+
+int result;
+bool bVisited[MAX];
+bool bDiscovered[MAX];// 1) discover-x
+int preNum[MAX];
+
+void bfs(int n) {
+	bDiscovered[n] = true;// 2) discover-o
+	queue<int> qNotVisitedYet;
+	qNotVisitedYet.push(n);// 2) visit-x
+	while (!qNotVisitedYet.empty()) {
+		int v = qNotVisitedYet.front();// 3) visit-o
+		if (v == result) {
+			break;
+		}
+		qNotVisitedYet.pop();
+
+		if (!bDiscovered[v * 2]) {
+			preNum[v * 2] = v;
+			qNotVisitedYet.push(v * 2);
+			bDiscovered[v * 2] = true;
+		}
+		if (!bDiscovered[v / 3]) {
+			preNum[v / 3] = v;
+			qNotVisitedYet.push(v / 3);
+			bDiscovered[v / 3] = true;
+		}
+	}
+	return;
+}
+
+int calculateLength(int n) {
+	int cnt = 0;
+	while (n != 1) {
+		cnt++;
+		n = preNum[n];
+	}
+	return cnt;
+}
+
+int main() {
+	scanf("%d", &result);
+	for (int i = 0; i < MAX; i++) {
+		bVisited[i] = false;
+		bDiscovered[i] = false;
+		preNum[i] = -1;
+	}
+	bfs(1);
+	printf("%d\n", calculateLength(result));
+	return 0;
+}
+*/
