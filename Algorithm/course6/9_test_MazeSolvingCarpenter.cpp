@@ -35,6 +35,8 @@ void bfs(int y, int x) {
 		Point vp = qNotVisitedYet.front();// 3) visit-o
 		y = vp.y;
 		x = vp.x;
+		printf("Point( %d , %d )\n", vp.y, vp.x);
+		//printf("queue size : %d\n", qNotVisitedYet.size());
 		qNotVisitedYet.pop();
 
 		//UP : Point(y-1, x)
@@ -66,8 +68,8 @@ void bfs(int y, int x) {
 			prePoint[y][x - 1] = Point(y, x);
 		}
 
-		/*these store wall co-ordinates*/ //wall means board[][] == 1
-										  //UP : Point(y-1, x)
+		/*these store wall co-ordinates*/
+		//UP : Point(y-1, x)
 		if (board[y][x] == 0) {
 			if ((0 <= y - 1 && y - 1 < Y) && !bDiscovered[y - 1][x] && board[y - 1][x] != 0) {
 				Point pNVY(y - 1, x);
@@ -101,6 +103,8 @@ int countPathLen(int startY, int startX, int endY, int endX) {
 	int cnt = 0;
 	int tempY = endY, tempX = endX;
 	int j, i;
+
+	printf("pre-orders : ");
 	while (true) {
 		cnt++;
 		if (prePoint[tempY][tempX].y == startY
@@ -108,9 +112,11 @@ int countPathLen(int startY, int startX, int endY, int endX) {
 			break;
 		j = prePoint[tempY][tempX].y;
 		i = prePoint[tempY][tempX].x;
+		printf("(%d,%d) -> ", j, i);
 		tempY = j;
 		tempX = i;
 	}
+	printf("\n");
 	return cnt;
 }
 
@@ -135,18 +141,36 @@ int main() {
 	//convert maze to graph
 	bfs(Y - 1, 0);
 
+	//count shortest path length
+	//int cnt = countPathLen(Y - 1, 0, 0, X - 1);
+	//printf("%d\n", cnt);
+	
 	//start co-ordinate(Y-1, 0) to Wall distance
 	int cnt;
 	for (int j = 0; j < Y; j++) {
 		for (int i = 0; i < X; i++) {
 			if (board[j][i] != 0 && bDiscovered[j][i]) {
 				cnt = 0;
-				cnt = countPathLen(Y - 1, 0, j, i);
-				board[j][i] += (cnt - 1);
+				cnt = countPathLen(Y-1, 0, j, i);
+				printf("distance between (%d,%d) and (%d,%d) is %d\n", Y - 1, 0, j, i, cnt);
+				board[j][i] += (cnt-1);
 				bDistance[j][i][0] = true;
 			}
 		}
 	}
+
+
+
+	//test start
+	for (int j = 0; j < Y; j++)
+		for (int i = 0; i < X; i++) {
+			printf("%d", board[j][i]);
+			if (i == X - 1) printf("\n");
+			else printf(" ");
+		}
+	//test end
+
+
 
 	//end co-ordinate(0, X-1) to Wall distance
 	for (int j = 0; j < Y; j++)
@@ -155,25 +179,35 @@ int main() {
 			bVisited[j][i] = false;
 		}
 	//convert maze to graph
-	bfs(0, X - 1);
+	bfs(0, X-1);
 	//start co-ordinate(Y-1, 0) to Wall distance
 	for (int j = 0; j < Y; j++) {
 		for (int i = 0; i < X; i++) {
 			if (board[j][i] != 0 && bDiscovered[j][i]) {// && bDiscovered[j][i]
 				cnt = 0;
-				cnt = countPathLen(0, X - 1, j, i);
+				cnt = countPathLen(0, X-1, j, i);
 				board[j][i] += cnt;
 				bDistance[j][i][1] = true;
 			}
 		}
 	}
-
+	printf("\n");
+	//test start
+	for (int j = 0; j < Y; j++)
+		for (int i = 0; i < X; i++) {
+			printf("%d", board[j][i]);
+			if (i == X - 1) printf("\n");
+			else printf(" ");
+		}
+	//test end
+	
 	int minDistance = 987654321;
 	for (int j = 0; j < Y; j++)
 		for (int i = 0; i < X; i++) {
 			if (bDistance[j][i][0] && bDistance[j][i][1] && (board[j][i] < minDistance))
 				minDistance = board[j][i];
 		}
-	printf("%d\n", minDistance);
+	printf("minDistance : %d\n", minDistance);
+	//bDistance[j][i][0] = true;
 	return 0;
 }

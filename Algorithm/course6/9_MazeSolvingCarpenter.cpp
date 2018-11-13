@@ -132,7 +132,7 @@ int main() {
 				bDistance[j][i][k] = false;
 			}
 
-	//convert maze to graph
+	//convert maze to graph from start co-ordinate
 	bfs(Y - 1, 0);
 
 	//start co-ordinate(Y-1, 0) to Wall distance
@@ -154,8 +154,9 @@ int main() {
 			bDiscovered[j][i] = false;
 			bVisited[j][i] = false;
 		}
-	//convert maze to graph
+	//convert maze to graph from end co-ordinate
 	bfs(0, X - 1);
+    
 	//start co-ordinate(Y-1, 0) to Wall distance
 	for (int j = 0; j < Y; j++) {
 		for (int i = 0; i < X; i++) {

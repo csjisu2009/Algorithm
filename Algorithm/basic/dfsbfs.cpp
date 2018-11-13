@@ -10,12 +10,6 @@ using namespace std;
 
 #define MAX 1000
 
-class Point{
-public: 
-	int y;
-	int x;
-};
-
 int N, E;
 bool bVisited[MAX];
 bool bConnected[MAX][MAX];

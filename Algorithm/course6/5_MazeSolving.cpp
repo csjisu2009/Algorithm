@@ -35,8 +35,9 @@ int Y, X;
 int board[MAX][MAX];
 queue<Point> qPoints;
 bool bVisited[MAX][MAX];
+//bool bConnected[MAX][MAX];
 bool bDiscovered[MAX][MAX];// 1) discover-x
-Point prePoint[MAX][MAX];// use this when you count shortest path length
+Point prePoint[MAX][MAX];
 
 void bfs(int y, int x) {
 	bDiscovered[y][x] = true;// 2) discover-o
@@ -83,6 +84,26 @@ void bfs(int y, int x) {
 	return;
 }
 
+int countPathLen(int startY, int startX, int endY, int endX) {
+	int cnt = 0;
+	int tempY = endY, tempX = endX;
+	int j, i;
+	
+	while (true) {
+		cnt++;
+		if( board[ prePoint[tempY][tempX].y ][ prePoint[tempY][tempX].x ] != 0 )
+			break;
+		if (prePoint[tempY][tempX].y == startY
+			&& prePoint[tempY][tempX].x == startX)
+			break;
+		j = prePoint[tempY][tempX].y;
+		i = prePoint[tempY][tempX].x;;
+		tempY = j;
+		tempX = i;
+	}
+	return cnt;
+}
+
 int main() {
 	scanf("%d %d", &Y, &X);
 	for (int j = 0; j < Y; j++)
@@ -95,22 +116,11 @@ int main() {
 			bVisited[j][i] = false;
 		}
 
+	//convert maze to graph
 	bfs(Y-1, 0);
 
 	//count shortest path length
-	int cnt = 0;
-	int tempY = 0, tempX = X-1;
-	int j, i;
-	while (true) {
-		cnt++;
-		if (prePoint[tempY][tempX].y == Y - 1
-			&& prePoint[tempY][tempX].x == 0)
-			break;
-		j = prePoint[tempY][tempX].y;
-		i = prePoint[tempY][tempX].x;;
-		tempY = j;
-		tempX = i;
-	}
+	int cnt = countPathLen(Y-1, 0, 0, X-1);
 	printf("%d\n", cnt);
 	
 	return 0;
