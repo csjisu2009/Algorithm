@@ -11,9 +11,9 @@ using namespace std;
 #define MAX 1000
 
 int N, E;
+bool bDiscovered[MAX];// 1) discover-x
 bool bVisited[MAX];
 bool bConnected[MAX][MAX];
-bool bDiscovered[MAX];// 1) discover-x
 
 void dfs(int n) {
 	printf("%d", n);
@@ -28,14 +28,15 @@ void bfs(int n) {
 	bDiscovered[n] = true;// 2) discover-o
 	queue<int> qNotVisitedYet;
 	qNotVisitedYet.push(n);// 2) visit-x
+	int v;
 	while (!qNotVisitedYet.empty()) {
-		int v = qNotVisitedYet.front();// 3) visit-o
+		v = qNotVisitedYet.front();// 3) visit-o
 		printf("%d", v);
 		qNotVisitedYet.pop();
 		for (int i = 0; i < N; i++)
-			if (bConnected[v][i] && !bDiscovered[i]) {
-				qNotVisitedYet.push(i);
+			if (!bDiscovered[i] && bConnected[v][i]) {
 				bDiscovered[i] = true;
+				qNotVisitedYet.push(i);
 			}
 	}
 	return;
