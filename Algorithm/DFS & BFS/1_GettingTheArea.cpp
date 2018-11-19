@@ -1,3 +1,21 @@
+/*remember : when you wannna solve shortest path problem, bfs is proper
+             you must think clearly when use dfs and when use bfs
+             you know when dfs and bfs are same same?? -- when you wanna check all the situation!! they are same same!!
+*/
+
+//time   : 1h 30m
+
+/*review : 1. bfs !!
+           2. why 60.0 -> 50.0 after solving the problem of
+            input:
+              2 2 3
+              0 0 0 0
+              0 1 0 1
+              1 0 1 0
+            output:
+              4 -> 1
+*/
+
 #include <stdio.h>
 #include <queue>
 using namespace std;
