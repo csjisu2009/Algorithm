@@ -34,8 +34,8 @@ int main(){
     char strB[MAX+1];
     scanf("%[^\n]", &strA);//gets(strA);
     scanf(" %[^\n]", &strB);//gets(strB);
-    int lenA = strlen(strA);
-    int lenB = strlen(strB);
-    printStrInclude(strA, strB, lenA, lenB);
+    int aLen = strlen(strA);
+    int bLen = strlen(strB);
+    printStrInclude(strA, strB, aLen, bLen);
     return 0;
 }
