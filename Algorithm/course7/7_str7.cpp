@@ -12,7 +12,7 @@
            4. the function I programmed have funcking bug!!
               bool bDictionaryOrderAB(char* a, char* b, int aSize, int bSize)
               I did not solved the problem yet..
-              So I progammed strcmp() ( immitation of strCompare() ) instead of this bug function..
+              So I progammed strcmp() ( imitation of strCompare() ) instead of this bug function..
 
            5. 0, '\0', '0' - differences between them
               The first two of these are the same thing; they just represent an int with value 0.
@@ -51,14 +51,14 @@ bool bDictionaryOrderAB(char* a, char* b, int aSize, int bSize){
 }
 */
 
+//imitation of strcmp().. this code is very concise!!
 int strCompare(char* a, char* b){
     int index = 0;
     char chA, chB;
     do{
         chA = a[index];
         chB = b[index];
-        if(chA == '\0')
-            return chA - chB;
+        if(chA == '\0') return chA - chB;
         index++;
     }while(chA == chB);
     return chA - chB;
@@ -85,7 +85,7 @@ int main(){
         iLen = strlen(str[i]);
         for(int j = i+1 ; j < n ; j++){
             jLen = strlen(str[j]);
-            if(strCompare(&str[i][0], &str[j][0]) > 0)//if(!bDictionaryOrderAB(&str[i][0], &str[j][0], iLen, jLen)) - bug!!!!!!!fuck!!!!!!
+            if(strCompare(&str[i][0], &str[j][0]) > 0)//if(!bDictionaryOrderAB(&str[i][0], &str[j][0], iLen, jLen)) - bug!!!!!!! fuck!!!!!!
                 changeOrder(i, j);
         }
     }
