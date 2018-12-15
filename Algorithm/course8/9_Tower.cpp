@@ -1,3 +1,15 @@
+//time   : 0h 30m
+
+/*review : 1. Read the text exactly!!
+              same height tower can't receive radar!!
+              e)
+              input:
+              10
+              1 1 1 1 1 1 1 1 1 1
+              ouput:
+              0 0 0 0 0 0 0 0 0 0
+*/
+
 #include <iostream>
 #include <stdio.h>
 #include <stack>
@@ -59,6 +71,7 @@ int main() {
 }
 
 /*
+//naive method
 #include <stdio.h>
 
 #define MAX 500000
@@ -74,7 +87,7 @@ int main(){
     rReTower[0] = 0;
     for(int i = N-1 ; 1 <= i ; i--){
         for(int j = i-1 ; 0 <= j ; j--){
-            if(hTower[j] >= hTower[i]){
+            if(hTower[j] > hTower[i]){ // >= is wrong logic!!
                 rReTower[i] = j + 1;
                 break;
             }
