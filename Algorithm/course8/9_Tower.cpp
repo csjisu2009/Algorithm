@@ -1,3 +1,64 @@
+#include <iostream>
+#include <stdio.h>
+#include <stack>
+
+using namespace std;
+
+#define MAX 500000
+
+class Tower {
+public:
+	int index;
+	int height;
+	Tower(int _index, int _height) {
+		this->index = _index;
+		this->height = _height;
+	}
+};
+
+int N;
+int hTower[MAX];
+int rReTower[MAX];//radar received tower
+stack<Tower> sHigher;
+
+int main() {
+	//input
+	scanf("%d", &N);
+	for (int i = 0; i < N; i++)
+		scanf("%d", &hTower[i]);
+
+	for (int i = 0; i < N; i++) {
+
+		if (sHigher.empty()) {
+			sHigher.push(Tower(i + 1, hTower[i]));
+			rReTower[i] = 0;
+		}
+		else if (sHigher.top().height > hTower[i]) {
+			rReTower[i] = sHigher.top().index;
+			sHigher.push(Tower(i + 1, hTower[i]));
+		}
+		else if (sHigher.top().height <= hTower[i]) {
+			while(!sHigher.empty() && sHigher.top().height <= hTower[i])
+				sHigher.pop();
+			if(sHigher.empty())
+				rReTower[i] = 0;
+			else
+				rReTower[i] = sHigher.top().index;
+			sHigher.push(Tower(i + 1, hTower[i]));
+		}
+	}
+
+	//output
+	for (int i = 0; i < N; i++) {
+		printf("%d", rReTower[i]);
+		if (i == N - 1) printf("\n");
+		else printf(" ");
+	}
+
+	return 0;
+}
+
+/*
 #include <stdio.h>
 
 #define MAX 500000
@@ -30,3 +91,4 @@ int main(){
 
     return 0;
 }
+*/
