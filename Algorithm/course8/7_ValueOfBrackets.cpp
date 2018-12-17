@@ -7,54 +7,93 @@ using namespace std;
 
 #define MAX 30
 
-char str[MAX+1];
-int sum, temp;
+char str[MAX + 1];
+int psum = 1, sum = 0;//psum is a part of sum
 
-bool checkGrammer(){
-    stack<char> sBrackets;
-    int size = strlen(str);
-    for(int i = 0 ; i < size ; i++){
-        if(str[i] == '(' || str[i] == '[')
-            sBrackets.push(str[i]);
-        else{
-            if(sBrackets.empty())
-                return false;
-            else if(str[i] == ')' && sBrackets.front() == '[')
-                return false;
-            else if(str[i] == ']' && sBrackets.front() == '(')
-                return false;
-            else
-                sBrackets.pop();
-        }
-    }
-    return sBrackets.empty();
+class Bracket {
+public:
+	char bracket;
+	int number;
+	Bracket() {}
+	Bracket(char bracket) {
+		this->bracket = bracket;
+		if (bracket == '(')  this->number = 2;
+		else if (bracket == '[')  this->number = 3;
+	}
+};
+
+bool checkGrammer() {
+	stack<char> sBrackets;
+	int size = strlen(str);
+	for (int i = 0; i < size; i++) {
+		if (str[i] == '(' || str[i] == '[')
+			sBrackets.push(str[i]);
+		else {
+			if (sBrackets.empty())
+				return false;
+			else if (str[i] == ')' && sBrackets.top() == '[')
+				return false;
+			else if (str[i] == ']' && sBrackets.top() == '(')
+				return false;
+			else
+				sBrackets.pop();
+		}
+	}
+	return sBrackets.empty();
 }
 
- void calcBrackets(){
-    stack<char> sBrackets;
-    int size = strlen(str);
-    sum = 0;
-    for(int i = 0 ; i < size ; i++){
-        if(str[i] == '(' || str[i] == '[')
-            temp = 1;
-        else{
-            if(str[i] == ')')
-                temp = temp*2;
-            else if(str[i] == ']')
-                temp = temp*3;
-            if(i != size-1 && (str[i+1] == '(' || str[i+1] == '['))
-                sum += temp;
-        }
-    }
+stack<Bracket> sB;
+stack<int> sSum;//if(sB.empty()); sSum.push(sum); and add the sum of sSum in the end!!
+void calcBrackets() {
+	Bracket bTop;
+	int size = strlen(str);
+	for (int i = 0; i < size; i++) {
+		if (str[i] == '(' || str[i] == '[')
+			sB.push(Bracket(str[i]));
+		else {
+			bTop = sB.top();
+			sB.pop();
+			if (!sB.empty()) {
+				psum *= bTop.number;
+				if (i + 1 < size && (str[i + 1] == '(' || str[i + 1] == '[')) {
+					sum += psum;
+					psum = 1;
+				}
+			}
+			else {
+				if (psum == 1) {
+					psum *= bTop.number;
+					sum += psum;
+				}
+				else {
+					sum += psum;
+					sum *= bTop.number;
+				}
+				sSum.push(sum);
+				sum = 0;
+				psum = 1;
+			}
+		}
+	}
 }
 
-int main(){
-    cin >> str;
-    if(checkGrammer()){
-        cout << '0' << endl;
-        return 0;
-    }
-    calcBrackets();
-    cout << sum << endl;
-    return 0;
+//calculate sum of sSum
+int calcSum() {
+	int result = 0;
+	while (!sSum.empty()) {
+		result += sSum.top();
+		sSum.pop();
+	}
+	return result;
+}
+
+int main() {
+	cin >> str;
+	if (!checkGrammer()) {
+		cout << '0' << endl;
+		return 0;
+	}
+	calcBrackets();
+	cout << calcSum() << endl;
+	return 0;
 }
