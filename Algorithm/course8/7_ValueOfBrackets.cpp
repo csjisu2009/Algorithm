@@ -1,7 +1,7 @@
 //time   : 3h 0m
 
-/*review : 1. 1 kinds of method
-            1) complicate method : 80 points..
+/*review : 1. methods
+            1) first method : 80 points..
             2) add number at every step method
 
            2. sometimes you should think the whole process again!!
@@ -80,7 +80,7 @@ int main() {
 	return 0;
 }
 
-
+//first method
 //80 points
 /*
 #include <iostream>

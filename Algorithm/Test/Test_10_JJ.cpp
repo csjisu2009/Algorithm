@@ -1,8 +1,8 @@
-//time   : 0h 20m
+//time   : 1h 0m
 
 /*review : 1. naive method : 60 points
 
-           2. do not forget "return" !! in "if(r == 0)" logic 
+           2. do not forget "return" !! in "if(r == 0)" logic
 
 */
 
