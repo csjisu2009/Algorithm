@@ -18,7 +18,7 @@ int partition(int* arr, int lo, int hi){
 
 void quickSort(int* arr, int lo, int hi){
     if(lo < hi){
-        int pIndex = partition(arr, lo, hi);
+        int pIndex = partition(arr, lo, hi);//this line is not out of 'if(lo < hi)' block
         quickSort(arr, lo, pIndex);//[, ) !! that why pIndex-1 -> pIndex
         quickSort(arr, pIndex+1, hi);
     }
